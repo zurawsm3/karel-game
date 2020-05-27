@@ -1,0 +1,47 @@
+textarea {
+    resize: none;
+      background: #f1d796;
+  border: 1px solid red;
+  border-radius: 7px 7px 17px 7px;
+    overflow: auto;
+    color: #b21f2d;
+
+    /*border-width: 2px;*/
+}
+#board {
+    float: left;
+    /*width: 400px;*/
+    /*height: 406px;*/
+    text-align: center;
+    border: #0b2e13;
+}
+
+#map {
+    float: left;
+    /*width: 400px;*/
+    /*height: 406px;*/
+    /*text-align: center;*/
+    border: #00ff37;
+}
+
+#panel {
+  background: #f1d796;
+  border: 1px solid red;
+  border-radius: 10px 10px 10px 10px;
+  /*color: #b21f2d;*/
+}
+
+#input-panel:focus {
+  border-color: #d9534f;
+  background: #ffd265;
+  box-shadow: 3px 3px 3px rgba(255, 0, 0, 0.07) inset, 0px 0px 8px rgb(255, 0, 0);
+}
+
+textarea:focus {
+  outline: none;
+}
+
+#myCanvas {
+    box-shadow: 10px 10px 10px rgba(255, 0, 0, 0.07) inset, 0px 0px 8px rgb(255, 0, 0);
+}
+

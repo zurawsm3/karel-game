@@ -3,11 +3,13 @@
 <!doctype html>
 <html lang="pl">
 <head>
+    <script src="../../../static/js/draw_chessboard.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <link rel="icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/panel_game.css' %}">
     <meta name="generator" content="Jekyll v4.0.1">
     <title>Cover Template · Bootstrap</title>
 
@@ -37,39 +39,25 @@
 </head>
 <body class="text-center">
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="masthead">
-        <div class="inner">
-            <h3 class="masthead-brand">Karel robot</h3>
-            <nav class="nav nav-masthead justify-content-center">
-                <a class="nav-link active" href="documentation">Language documentation</a>
-            </nav>
+    <div class="mt-auto mb-0" id="tekst">
+        <h1>Show us your skills</h1>
+    </div>
+    <div class="row mt-3 mb-auto">
+        <div class="form-group col-xs-6 px-5" id="board">
+            <textarea  style="overflow:auto;resize:none" readonly class="read-panel" rows="7" cols="40" placeholder="Commands logs" ></textarea><br>
+            <textarea style="overflow:auto;resize:none" id="input-panel" class="input-panel" rows="7" cols="40" placeholder="Type commands in box..." autofocus></textarea><br>
+{#            button make disable disabled#}
+            <button id="code_submit" type="submit" class="btn btn-block btn-outline-danger codesubmit">Send code to robot</button>
+            <br>
         </div>
-    </header>
-    <main role="main" class="inner cover  my-auto">
-        <h1 class="cover-heading mb-3">Type streaming</h1>
-        <p class="lead">
-            Use Karel language.<br>
-            Lead robot to collect diamonds.<br>
-            Invite your friends to show your skills.<br>
-        </p>
-        <form class="justify-content-center">
-            <div class="form-group">
-                <label>
-                    <input class="form-control-lg" type="text" placeholder="Room name.." autofocus>
-                </label>
-                <p class="lead mb-3 mt-0">
-                    <a href="#" class="btn btn-outline-danger">Create room</a>
-                </p>
-            </div>
+        <div id="map" class="col-xs-6" >
+            <canvas id="myCanvas"></canvas>
+            {{ room_name|json_script:"room-name" }}
+            <script src="../../../static/js/map_robot.js"></script>
+        </div>
 
-        </form>
-
-        <br>
-        <br>
-        <br>
-        <br>
-
-    </main>
+    </div>
+    <div style="clear:both;"></div>
 </div>
 </body>
 </html>

@@ -1,10 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Karel game</title>
-</head>
-<body>
+{% load static %}
 
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>Cover Template · Bootstrap</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/cover/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/cover.css' %}" rel="stylesheet">
+</head>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="masthead">
+        <div class="inner">
+            <h3 class="masthead-brand">Karel robot</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link active" href="documentation">Language documentation</a>
+            </nav>
+        </div>
+    </header>
+    <main role="main" class="inner cover  my-auto">
+        <h1 class="cover-heading mb-3">Type streaming</h1>
+        <p class="lead">
+            Use Karel language.<br>
+            Lead robot to collect diamonds.<br>
+            Invite your friends to show your skills.<br>
+        </p>
+        <form class="justify-content-center">
+            <div class="form-group">
+                <input id="room-name-input" class="form-control-lg" type="text" spellcheck="false" placeholder="Room name.." autofocus>
+                <br>
+                <input class="my-3 btn btn-outline-danger" id="room-name-submit"  type="button" value="Create room">
+{#                <p  class="lead mb-3 mt-0">#}
+{#                    <a   class="btn btn-outline-danger" id="room-name-submit"  type="button" value="Enter">Create room</a>#}
+{#                </p>#}
+                <script src="{% static 'js/onclick.js' %}"></script>
+            </div>
+        </form>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+    </main>
+</div>
 </body>
 </html>
