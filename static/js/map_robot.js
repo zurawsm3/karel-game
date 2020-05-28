@@ -36,8 +36,8 @@ var c = canvas.getContext('2d');
 
 gameSocket.onopen = function (e) {
     draw_a_chessboard();
-    create_initial_gems_coordinates(center_fields);
-    draw_gems(gems_coordinates);
+    // create_initial_gems_coordinates(center_fields);
+    // draw_gems(gems_coordinates);
 }
 
 
@@ -51,10 +51,9 @@ gameSocket.onmessage = function (e) {
         draw_robot(ROBOT_X, ROBOT_Y, RADIUS_ROBOT);
         draw_a_chessboard();
     } else {
-                    if (window.wall === true) {
-                console.log("e")
-                document.querySelector('.read-panel').value += ("UPSdddaadd, WALL" + '\n');
-            }
+        if (window.wall === true) {
+            document.querySelector('.read-panel').value += ("You hit a WALL" + '\n');
+        }
         document.getElementById('title').innerHTML = "You hit the wall :(";
     }
 
@@ -74,13 +73,10 @@ document.querySelector('.codesubmit').onclick = function (e) {
     var message = message_oryginal.replace(/[\r\n]/g, ' ');
     message = message.toUpperCase();
     message = message.split(' ');
-
+    var message_filter = []
     for (let i = 0; i < message.length; i++) {
-        if (!commands.includes(message[i])) {
-            if (message[i] === "") {
-                console.log("You gived wrong command");
-            }
-            message.splice(i, 1)
+        if (commands.includes(message[i])) {
+            message_filter.push(message[i]);
         }
     }
 
@@ -91,8 +87,17 @@ document.querySelector('.codesubmit').onclick = function (e) {
     async function send_click() {
 
         for (let i = 0; i < message.length; i++) {
-                        if (window.wall === true) {
+            document.querySelector('#input-panel').value = message_oryginal;
+            document.getElementById('input-panel').innerHTML = "Invalid command";
+            if (!commands.includes(message[i])) {
+                document.querySelector('.read-panel').value += (message[i] + '\n' + "Invalid command. Try again" + '\n');
+                document.getElementById('title').innerHTML = "Invalid command";
+                document.querySelector('#input-panel').readOnly = true;
+                console.log(message_oryginal + "OOOO");
+                // document.getElementById("input-panel").value = message_oryginal;
+                document.getElementById("input-panel").placeholder = "Try next time";
                 break;
+
             }
             document.querySelector('.read-panel').value += (message[i] + '\n');
             if (message[i] === "GO") {
@@ -104,7 +109,7 @@ document.querySelector('.codesubmit').onclick = function (e) {
 
                     for (var z = 0; z < 10; z++) {
                         document.querySelector('#input-panel').value = message_oryginal;
-                        // console.log(document.querySelector('#input-panel').value);
+
                         await sleep(400);
 
                         gameSocket.send(
@@ -115,10 +120,13 @@ document.querySelector('.codesubmit').onclick = function (e) {
                         );
                     }
                 }
-
                 go();
                 await sleep_more(4500)
-                            console.log(window.wall);
+                if (window.wall ===true) {
+                    document.querySelector('#input-panel').readOnly = true;
+                    break;
+                }
+                console.log(window.wall);
 
             } else {
                 gameSocket.send(
@@ -133,27 +141,3 @@ document.querySelector('.codesubmit').onclick = function (e) {
     send_click()
     messageInputDom.value = '';
 };
-
-
-//CREATE GEMS COORDINATES
-function create_initial_gems_coordinates(center_of_fields) {
-    for (var i = 0; i < NUMBER_OF_GEMS; i++) {
-        x = center_of_fields[Math.floor(Math.random() * center_of_fields.length)];
-        y = center_of_fields[Math.floor(Math.random() * center_of_fields.length)];
-        while (check_if_tab_is_in_list([x, y], gems_coordinates)) {
-            x = center_of_fields[Math.floor(Math.random() * center_of_fields.length)];
-            y = center_of_fields[Math.floor(Math.random() * center_of_fields.length)];
-        }
-        gems_coordinates[i] = [x, y]
-    }
-}
-
-function check_if_tab_is_in_list(small_tab, big_tab) {
-    // console.log(big_tab)
-    for (var x = 0; x < (big_tab.length - 1); x++) {
-        if (JSON.stringify(big_tab[x]) === JSON.stringify(small_tab)) {
-            return true
-        }
-    }
-    return false
-}
