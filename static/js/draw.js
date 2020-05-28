@@ -23,9 +23,9 @@ function draw_robot(x, y, radius) {
 }
 
 function draw_gems(tab) {
-    console.log("wchodze")
-    console.log(tab)
+
     c.lineWidth = 3;
+    c.strokeStyle = "#b1023c";
     for (var x = 0; x < (tab.length); x++) {
         c.beginPath();
         c.arc(tab[x][0], tab[x][1], RADIUS_TREASURE, 0, 2 * Math.PI, false); //przypomnij sobie o false

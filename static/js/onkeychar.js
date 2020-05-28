@@ -1,5 +1,3 @@
-console.log(document.querySelector('#room-name-input').value);
-// var inputvalue = "";
 var input = document.querySelector('#room-name-input');
 input.addEventListener("keyup", function (event) {
     if (document.querySelector('#room-name-input').value !== "") {
