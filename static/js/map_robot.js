@@ -45,8 +45,19 @@ gameSocket.onmessage = function (e) {
     const data = JSON.parse(e.data);
     const ROBOT_X = data.coordinate[0];
     const ROBOT_Y = data.coordinate[1];
-    draw_robot(ROBOT_X, ROBOT_Y, RADIUS_ROBOT);
-    draw_a_chessboard();
+    window.wall = data.wall;
+    console.log(window.wall);
+    if (window.wall === false) {
+        draw_robot(ROBOT_X, ROBOT_Y, RADIUS_ROBOT);
+        draw_a_chessboard();
+    } else {
+                    if (window.wall === true) {
+                console.log("e")
+                document.querySelector('.read-panel').value += ("UPSdddaadd, WALL" + '\n');
+            }
+        document.getElementById('title').innerHTML = "You hit the wall :(";
+    }
+
 }
 
 gameSocket.onclose = function (e) {
@@ -55,33 +66,22 @@ gameSocket.onclose = function (e) {
 
 document.querySelector('.codesubmit').onclick = function (e) {
     document.querySelector('#input-panel').readOnly = true;
+    console.log(window.wall + "jest false?")
 
 
     const messageInputDom = document.querySelector('#input-panel');
-    // document.querySelector('#input-panel').value = "drewnp";
     var message_oryginal = messageInputDom.value;
     var message = message_oryginal.replace(/[\r\n]/g, ' ');
     message = message.toUpperCase();
     message = message.split(' ');
 
-    // document.querySelector('#input-panel').readOnly = true;
-    // console.log(document.getElementById("input-panel"));
-    // console.log(message);
-    // document.querySelector('#input-panel').value = message_oryginal;
-    // console.log(document.querySelector('#input-panel').value + sad);
-    // console.log("JJJJ");
-    // location.reload()
-
-    // document.querySelector('#input-panel').value = "drewnp";
     for (let i = 0; i < message.length; i++) {
-        // document.querySelector('#input-panel').value = "drewnp";
         if (!commands.includes(message[i])) {
             if (message[i] === "") {
                 console.log("You gived wrong command");
             }
             message.splice(i, 1)
         }
-        // document.querySelector('#input-panel').value = "drewnp";
     }
 
     function sleep_more(ms) {
@@ -91,9 +91,11 @@ document.querySelector('.codesubmit').onclick = function (e) {
     async function send_click() {
 
         for (let i = 0; i < message.length; i++) {
+                        if (window.wall === true) {
+                break;
+            }
             document.querySelector('.read-panel').value += (message[i] + '\n');
             if (message[i] === "GO") {
-                // document.querySelector('#input-panel').value = "drewnp";
                 function sleep(ms) {
                     return new Promise(resolve => setTimeout(resolve, ms));
                 }
@@ -102,8 +104,7 @@ document.querySelector('.codesubmit').onclick = function (e) {
 
                     for (var z = 0; z < 10; z++) {
                         document.querySelector('#input-panel').value = message_oryginal;
-                        console.log(document.querySelector('#input-panel').value);
-                        // document.querySelector('#input-panel').value = "drewnp";
+                        // console.log(document.querySelector('#input-panel').value);
                         await sleep(400);
 
                         gameSocket.send(
@@ -116,7 +117,9 @@ document.querySelector('.codesubmit').onclick = function (e) {
                 }
 
                 go();
-                await sleep_more(5000)
+                await sleep_more(4500)
+                            console.log(window.wall);
+
             } else {
                 gameSocket.send(
                     JSON.stringify({
@@ -126,34 +129,11 @@ document.querySelector('.codesubmit').onclick = function (e) {
             }
         }
     }
-    // document.querySelector('#input-panel').value = "drewnp"
+
     send_click()
-    // document.querySelector('#input-panel').value = "drewnp"
     messageInputDom.value = '';
 };
 
-// DRAW FUNCTIONS
-function draw_robot(x, y, radius) {
-    c.clearRect(0, 0, BOARD_FIELD_SIZE * SIZE_FIELD, BOARD_FIELD_SIZE * SIZE_FIELD);
-    c.beginPath();
-    c.arc(x, y, radius, 0, 2 * Math.PI, false);
-    c.lineWidth = 3;
-    c.strokeStyle = 'red';
-    c.stroke();
-    // c.strokeStyle = 'black';
-    ``
-}
-
-function draw_gems(tab) {
-    console.log("wchodze")
-    console.log(tab)
-    c.lineWidth = 3;
-    for (var x = 0; x < (tab.length); x++) {
-        c.beginPath();
-        c.arc(tab[x][0], tab[x][1], RADIUS_TREASURE, 0, 2 * Math.PI, false); //przypomnij sobie o false
-        c.stroke();
-    }
-}
 
 //CREATE GEMS COORDINATES
 function create_initial_gems_coordinates(center_of_fields) {

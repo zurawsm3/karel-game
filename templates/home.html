@@ -52,17 +52,25 @@
             Lead robot to collect diamonds.<br>
             Invite your friends to show your skills.<br>
         </p>
-        <form class="justify-content-center">
+        <form class="justify-content-center" id="myform">
             <div class="form-group">
-                <input id="room-name-input" class="form-control-lg" type="text" spellcheck="false" placeholder="Room name.." autofocus>
+                <input id="room-name-input" autocomplete="off" class="form-control-lg" type="text" spellcheck="false"
+ placeholder="Room name.." autofocus>
                 <br>
-                <input class="my-3 btn btn-outline-danger" id="room-name-submit"  type="button" value="Create room">
-{#                <p  class="lead mb-3 mt-0">#}
-{#                    <a   class="btn btn-outline-danger" id="room-name-submit"  type="button" value="Enter">Create room</a>#}
-{#                </p>#}
+                <button class="my-3 btn btn-outline-danger" id="room-name-submit" type="button" form="form1" >Create room</button>
+{#                <input class="my-3 btn btn-outline-danger" id="room-name-submit" type="button" value="Create room">#}
+                <script>
+
+
+
+
+                </script>
+                <script src="{% static 'js/onkeychar.js' %}"></script>
                 <script src="{% static 'js/onclick.js' %}"></script>
+
             </div>
         </form>
+{#        <script src="{% static 'js/form.js' %}"></script>#}
 
         <br>
         <br>
