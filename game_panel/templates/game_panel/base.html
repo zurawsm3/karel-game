@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Karel game">
+    <meta name="author" content="Marcin">
+    <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
+    <title>Karel Game</title>
+
+    {% block js %}{% endblock %}
+    {% block css %}{% endblock %}
+    {% include 'game_panel/bootstap_css.html' %}
+</head>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>
