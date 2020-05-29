@@ -46,17 +46,18 @@ gameSocket.onmessage = function (e) {
     const ROBOT_X = data.coordinate_robot[0];
     const ROBOT_Y = data.coordinate_robot[1];
     const gems = data.coordinate_gems;
-    console.log(gems);
+    const end_radius_x = data.end_radius[0];
+    const end_radius_y = data.end_radius[1];
     window.wall = data.wall;
     console.log(window.wall);
     if (window.wall === false) {
-        draw_robot(ROBOT_X, ROBOT_Y, RADIUS_ROBOT);
+        draw_robot(ROBOT_X, ROBOT_Y, RADIUS_ROBOT, end_radius_x, end_radius_y);
         draw_a_chessboard();
         draw_gems(gems);
         if (gems.length === 0) {
             console.log("weszlo");
             document.querySelector('.read-panel').value += ("Do You want play again?" + '\n');
-            document.getElementById('title').innerHTML = "Congratulations! You won :)";
+            document.getElementById('title').innerHTML = "Great! Map is clear :)";
         }
     } else {
         document.querySelector('.read-panel').value += ("You hit a WALL" + '\n');
@@ -82,6 +83,14 @@ document.querySelector('.codesubmit').onclick = function (e) {
     var message = message_oryginal.replace(/[\r\n]/g, ' ');
     message = message.toUpperCase();
     message = message.split(' ');
+    var message_filtered = [];
+    for (let i=0; i<message.length; i++) {
+        if (!(message[i] === "")) {
+            message_filtered.push(message[i])
+        }
+    }
+    console.log(message_filtered);
+
 
     function sleep_more(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -89,20 +98,19 @@ document.querySelector('.codesubmit').onclick = function (e) {
 
     async function send_click() {
 
-        for (let i = 0; i < message.length; i++) {
+        for (let i = 0; i < message_filtered.length; i++) {
             document.querySelector('#input-panel').value = message_oryginal;
             document.getElementById('input-panel').innerHTML = "Invalid command";
-            if (!commands.includes(message[i])) {
-                document.querySelector('.read-panel').value += (message[i] + '\n' + "Invalid command. Try again" + '\n');
+            if (!commands.includes(message_filtered[i])) {
+                document.querySelector('.read-panel').value += (message_filtered[i] + '\n' + "Invalid command. Try again" + '\n');
                 document.getElementById('title').innerHTML = "Invalid command";
                 document.querySelector('#input-panel').readOnly = true;
-                console.log(message_oryginal + "OOOO");
                 // document.getElementById("input-panel").value = message_oryginal;
                 document.getElementById("input-panel").placeholder = "Try next time";
                 break;
             }
-            document.querySelector('.read-panel').value += (message[i] + '\n');
-            if (message[i] === "GO") {
+            document.querySelector('.read-panel').value += (message_filtered[i] + '\n');
+            if (message_filtered[i] === "GO") {
                 function sleep(ms) {
                     return new Promise(resolve => setTimeout(resolve, ms));
                 }
@@ -113,11 +121,10 @@ document.querySelector('.codesubmit').onclick = function (e) {
                         document.querySelector('#input-panel').value = message_oryginal;
 
                         await sleep(400);
-                        console.log(message[i] + "OOO");
                         gameSocket.send(
                             JSON.stringify({
 
-                                    'message': message[i]
+                                    'message': message_filtered[i]
                                 }
                             )
                         );
@@ -134,7 +141,7 @@ document.querySelector('.codesubmit').onclick = function (e) {
             } else {
                 gameSocket.send(
                     JSON.stringify({
-                        'message': message[i]
+                        'message': message_filtered[i]
                     })
                 );
             }

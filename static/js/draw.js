@@ -13,12 +13,16 @@ function draw_a_chessboard() {
     }
 }
 
-function draw_robot(x, y, radius) {
+function draw_robot(x, y, radius, radius_end_x, radius_end_y) {
     c.clearRect(0, 0, BOARD_FIELD_SIZE * SIZE_FIELD, BOARD_FIELD_SIZE * SIZE_FIELD);
     c.beginPath();
     c.arc(x, y, radius, 0, 2 * Math.PI, false);
     c.lineWidth = 3;
     c.strokeStyle = 'red';
+    c.stroke();
+    c.beginPath();
+    c.moveTo(x,y);
+    c.lineTo(radius_end_x,radius_end_y);
     c.stroke();
 }
 

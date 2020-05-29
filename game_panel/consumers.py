@@ -6,11 +6,13 @@ import random
 
 class ChatConsumer(WebsocketConsumer):
     robot_coordinates = {}
+    end_radius = {}
     gems_coordinates = {}
     actual_direction = 'north'
     wall = False
     sendwallsignal = False
-    BOARD_FIELD_SIZE = NUMBER_OF_GEMS = 2
+    BOARD_FIELD_SIZE = 10
+    NUMBER_OF_GEMS = 10
     SIZE_FIELD = 40
     center_fields = []
     for i in range(BOARD_FIELD_SIZE):
@@ -33,12 +35,13 @@ class ChatConsumer(WebsocketConsumer):
                     if [GEM_X, GEM_Y] not in self.gems_coordinates[self.room_name]:
                         self.gems_coordinates[self.room_name].append([GEM_X, GEM_Y])
                         break
-        print(self.gems_coordinates[self.room_name])
 
+        if self.room_name not in self.end_radius:
+            END_RADIUS_X = self.robot_coordinates[self.room_name][0]
+            END_RADIUS_Y = self.robot_coordinates[self.room_name][1] - self.SIZE_FIELD/2
+            self.end_radius[self.room_name] = [END_RADIUS_X, END_RADIUS_Y]
 
-        print(self.room_name)
         self.room_group_name = 'chat_%s' % self.room_name
-        print("GGGGGGG")
 
         # Join room group
         async_to_sync(self.channel_layer.send)(
@@ -46,6 +49,7 @@ class ChatConsumer(WebsocketConsumer):
                 'type': 'coordinate_message',
                 'coordinate_robot': self.robot_coordinates[self.room_name],
                 'coordinate_gems': self.gems_coordinates[self.room_name],
+                'end_radius': self.end_radius[self.room_name],
                 'wall': self.wall
             })
 
@@ -65,49 +69,65 @@ class ChatConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
-
-        print(message)
-        print(self.actual_direction)
-        print(self.robot_coordinates)
         if message == 'LEFT':
             if self.actual_direction == 'north':
+                self.end_radius[self.room_name][0] -= self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] += self.SIZE_FIELD/2
                 self.actual_direction = 'west'
             elif self.actual_direction == 'west':
+                self.end_radius[self.room_name][0] += self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] += self.SIZE_FIELD/2
                 self.actual_direction = 'south'
             elif self.actual_direction == 'south':
+                self.end_radius[self.room_name][0] += self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] -= self.SIZE_FIELD/2
                 self.actual_direction = 'east'
             else:
+                self.end_radius[self.room_name][0] -= self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] -= self.SIZE_FIELD/2
                 self.actual_direction = 'north'
         elif message == 'RIGHT':
             if self.actual_direction == 'north':
+                self.end_radius[self.room_name][0] += self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] += self.SIZE_FIELD/2
                 self.actual_direction = 'east'
             elif self.actual_direction == 'east':
+                self.end_radius[self.room_name][0] -= self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] += self.SIZE_FIELD/2
                 self.actual_direction = 'south'
             elif self.actual_direction == 'south':
+                self.end_radius[self.room_name][0] -= self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] -= self.SIZE_FIELD/2
                 self.actual_direction = 'west'
             else:
+                self.end_radius[self.room_name][0] += self.SIZE_FIELD/2
+                self.end_radius[self.room_name][1] -= self.SIZE_FIELD/2
                 self.actual_direction = 'north'
         elif message == 'GO':
             if self.actual_direction == 'north':
                 if self.robot_coordinates[self.room_name][1] == self.SIZE_FIELD/2:
                     self.wall = True
                 else:
-                    self.robot_coordinates[self.room_name][1] = self.robot_coordinates[self.room_name][1] - 4
+                    self.robot_coordinates[self.room_name][1] -= 4
+                    self.end_radius[self.room_name][1] -= 4
             elif self.actual_direction == 'east':
                 if self.robot_coordinates[self.room_name][0] == (self.SIZE_FIELD*self.BOARD_FIELD_SIZE) - (self.SIZE_FIELD/2):
                     self.wall = True
                 else:
-                    self.robot_coordinates[self.room_name][0] = self.robot_coordinates[self.room_name][0] + 4
+                    self.robot_coordinates[self.room_name][0] += 4
+                    self.end_radius[self.room_name][0] += 4
             elif self.actual_direction == 'south':
                 if self.robot_coordinates[self.room_name][1] == (self.SIZE_FIELD*self.BOARD_FIELD_SIZE) - (self.SIZE_FIELD/2):
                     self.wall = True
                 else:
-                    self.robot_coordinates[self.room_name][1] = self.robot_coordinates[self.room_name][1] + 4
+                    self.robot_coordinates[self.room_name][1] += 4
+                    self.end_radius[self.room_name][1] += 4
             else:
                 if self.robot_coordinates[self.room_name][0] == self.SIZE_FIELD/2:
                     self.wall = True
                 else:
-                    self.robot_coordinates[self.room_name][0] = self.robot_coordinates[self.room_name][0] - 4
+                    self.robot_coordinates[self.room_name][0] -= 4
+                    self.end_radius[self.room_name][0] -= 4
         elif message == 'GET':
             print([self.robot_coordinates[self.room_name][0], self.robot_coordinates[self.room_name][1]])
             print(self.gems_coordinates)
@@ -123,6 +143,7 @@ class ChatConsumer(WebsocketConsumer):
                     'type': 'coordinate_message',
                     'coordinate_gems': self.gems_coordinates[self.room_name],
                     'coordinate_robot': self.robot_coordinates[self.room_name],
+                    'end_radius': self.end_radius[self.room_name],
                     'wall': self.wall
                 }
             )
@@ -144,12 +165,14 @@ class ChatConsumer(WebsocketConsumer):
     def coordinate_message(self, event):
         coordinates_robot = event['coordinate_robot']
         coordinates_gems = event['coordinate_gems']
+        end_radius = event['end_radius']
         wall = event['wall']
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'coordinate_robot': coordinates_robot,
             'coordinate_gems': coordinates_gems,
+            'end_radius': end_radius,
             'wall': wall
         }))
 
