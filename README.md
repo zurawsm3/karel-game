@@ -18,7 +18,10 @@ Project is created with:
  * Redis 5.0.9
 
 ## Screenshots
-
+![home](./screenshots/home.png)
+![main](./screenshots/main.png)
+![move](./screenshots/move.png)
+![wall](./screenshots/wall.png)
 
 ## Setup
 > pip3 install -r requirements.txt <br />
