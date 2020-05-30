@@ -1,3 +1,9 @@
+const canvas = document.getElementById("myCanvas");
+canvas.width = 400;
+canvas.height = 400;
+const c = canvas.getContext('2d');
+
+
 function draw_a_chessboard() {
     c.lineWidth = 1;
     c.strokeStyle = 'red';
@@ -30,7 +36,7 @@ function draw_gems(tab) {
 
     c.lineWidth = 3;
     c.strokeStyle = "#b1023c";
-    for (var x = 0; x < (tab.length); x++) {
+    for (let x = 0; x < (tab.length); x++) {
         c.beginPath();
         c.arc(tab[x][0], tab[x][1], RADIUS_TREASURE, 0, 2 * Math.PI, false); //przypomnij sobie o false
         c.stroke();

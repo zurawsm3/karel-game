@@ -3,8 +3,8 @@
 
 
 {% block js %}
-    <script src="{% static 'js/draw.js' %}" async></script>
-    <script src="{% static 'js/map_robot.js' %}" async></script>
+    <script src="{% static 'js/draw.js' %}" defer></script>
+    <script src="{% static 'js/map_robot.js' %}" defer></script>
 {% endblock %}
 
 {% block css %}
@@ -26,7 +26,7 @@
         <textarea style="overflow:auto;resize:none" id="input-panel" class="input-panel" rows="7" cols="40"
                   placeholder="Type commands in box..." autofocus></textarea>
         <br>
-        <button id="code_submit" type="submit" class="btn btn-block btn-outline-danger codesubmit">
+        <button id="code-submit" type="submit" class="btn btn-block btn-outline-danger codesubmit">
             Send code to robot
         </button>
     </div>
